@@ -6,7 +6,7 @@
 /*   By: mlacombe <mlacombe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 00:22:31 by mlacombe          #+#    #+#             */
-/*   Updated: 2020/02/14 17:59:09 by mlacombe         ###   ########.fr       */
+/*   Updated: 2020/02/18 17:01:54 by mlacombe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,21 +15,23 @@
 static t_vec3_t	fdf_transform(t_fdf_t *fdf, t_vec3_t point)
 {
     t_vec3_t	ref_point;
+	double quo;
+	double ray;
 
     ref_point = point;
 	point = fdf_translate((t_vec3_t) {(fdf->max_len - 1) / -2.,
 		(fdf->nb_line - 1) / -2., (fdf->max + fdf->min) / -2.},point);
 	point = fdf_scaling(fdf->scale, point);
 	point = fdf_rotation(fdf->rotation, point, fdf);
-	point = fdf_translate((t_vec3_t){WIN_X / 2. + fdf->offset.x,
-		WIN_Y / 2. + fdf->offset.y, fdf->offset.z}, point);
 	if (fdf->perspective == 1)
 	{
-		if (point.z)
-			point = (t_vec3_t) {point.x / point.z, point.y / point.z, point.z};
-		else
-			point = (t_vec3_t) {point.x, point.y, point.z};
+		ray = (fdf->scale.x) * (fdf->scale.y);
+		quo = sqrtf(powf(point.x, 2) + powf(point.y, 2) + powf(point.z, 2));
+		point.x = ray * point.x / sqrtf(powf(ray, 2) - 2 * ray * point.z + powf(quo, 2));
+		point.y = ray * point.y / sqrtf(powf(ray, 2) - 2 * ray * point.z + powf(quo, 2));
 	}
+	point = fdf_translate((t_vec3_t){WIN_X / 2. + fdf->offset.x,
+		WIN_Y / 2. + fdf->offset.y, fdf->offset.z}, point);
 	point.z = ref_point.z;
 	return (point);
 }

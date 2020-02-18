@@ -6,7 +6,7 @@
 /*   By: mlacombe <mlacombe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 00:22:31 by mlacombe          #+#    #+#             */
-/*   Updated: 2020/02/14 18:05:14 by mlacombe         ###   ########.fr       */
+/*   Updated: 2020/02/18 17:03:00 by mlacombe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,6 @@ static void	fdf_hooker_texas_ranger2(int key, t_fdf_t *fdf)
 	if (key == I)
 	{
 		fdf->perspective = 0;
-		fdf->offset = (t_vec3_t) {0};
-		fdf->scale = fdf->o_scale;
 		fdf->rotation = (t_vec3_t) {M_PI / 3, fdf->rotation.y, M_PI / 4};
 	}
 	key == P ? fdf->perspective = 1 : 42;
@@ -89,7 +87,7 @@ void		fdf_mlx_manag(t_fdf_t *fdf)
 	fdf->o_scale = (t_vec2_t) {fmin(WIN_X / (fdf->max_len + 1),
 		WIN_Y / (fdf->nb_line + 1)), 1};
 	fdf->scale = fdf->o_scale;
-	fdf->offset = (t_vec3_t) {0, 0, 0};
+	fdf->rotation = (t_vec3_t) {M_PI / -9, M_PI / -9, 0};
 	fdf_mlx_data_addressor(fdf);
 	mlx_hook(fdf->win, 2, 1, fdf_hooker_texas_ranger, fdf);
 	mlx_loop(fdf->mlx);
