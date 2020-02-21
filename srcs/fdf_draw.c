@@ -6,39 +6,63 @@
 /*   By: mlacombe <mlacombe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 00:22:31 by mlacombe          #+#    #+#             */
-/*   Updated: 2020/02/18 17:01:54 by mlacombe         ###   ########.fr       */
+/*   Updated: 2020/02/21 21:32:35 by mlacombe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
+static t_vec3_t	fdf_projection(t_fdf_t *fdf, t_vec3_t point)
+{
+	t_vec3_t	quo;
+	double 		ray;
+	double		bump;
+
+	ray = (fdf->min == fdf->max ? 1 : (fdf->max - fdf->min) * 2);
+	bump = (point.z + (fdf->max - fdf->min) / 4.) * fdf->scale.y;
+	quo = (t_vec3_t) {point.x / fdf->max_len, point.y / fdf->nb_line, 0};
+	if (fdf->projection == 1)
+		point = (t_vec3_t){
+			(bump + ray) * sin(quo.x * 2 * M_PI) * cos(quo.y * M_PI),
+			(bump + ray) * sin(quo.y * M_PI),
+			(bump + ray) * cos(quo.x * 2 * M_PI) * cos(quo.y * M_PI)
+		};
+	else if (fdf->projection == 2)
+		point = (t_vec3_t){
+			(bump + ray) * sin(quo.x * 2 * M_PI), point.y,
+			(bump + ray) * cos(quo.x * 2 * M_PI)
+		};
+	return (point);
+}
+
 static t_vec3_t	fdf_transform(t_fdf_t *fdf, t_vec3_t point)
 {
     t_vec3_t	ref_point;
-	double quo;
-	double ray;
+	double		ref_z;
+	double		persp;
+	double		diam;
 
     ref_point = point;
+	diam = (fdf->min == fdf->max ? 2 : abs(fdf->max - fdf->min) * 4) +
+		hypot(hypot(fdf->max_len, fdf->nb_line), fdf->max - fdf->min);
 	point = fdf_translate((t_vec3_t) {(fdf->max_len - 1) / -2.,
-		(fdf->nb_line - 1) / -2., (fdf->max + fdf->min) / -2.},point);
-	point = fdf_scaling(fdf->scale, point);
+		(fdf->nb_line - 1) / -2., (fdf->max - fdf->min) / -4.},point);
+	ref_z = point.z;
+	point = fdf_projection(fdf, point);
 	point = fdf_rotation(fdf->rotation, point, fdf);
-	if (fdf->perspective == 1)
-	{
-		ray = (fdf->scale.x) * (fdf->scale.y);
-		quo = sqrtf(powf(point.x, 2) + powf(point.y, 2) + powf(point.z, 2));
-		point.x = ray * point.x / sqrtf(powf(ray, 2) - 2 * ray * point.z + powf(quo, 2));
-		point.y = ray * point.y / sqrtf(powf(ray, 2) - 2 * ray * point.z + powf(quo, 2));
-	}
-	point = fdf_translate((t_vec3_t){WIN_X / 2. + fdf->offset.x,
+	persp = ref_z / diam + 1;
+	point = fdf_scaling(fdf->scale, point);
+	if (fdf->perspective & 1)
+		point = (t_vec3_t) {point.x * persp, point.y * persp, point.z * persp};
+	point = fdf_translate((t_vec3_t) {WIN_X / 2. + fdf->offset.x,
 		WIN_Y / 2. + fdf->offset.y, fdf->offset.z}, point);
-	point.z = ref_point.z;
+	point.z = 360 * (ref_point.z - fdf->min) / (fdf->max - fdf->min);
 	return (point);
 }
 
 static void		fdf_put_pixel(t_fdf_t *fdf, t_vec3_t point, int color)
 {
-	int i;
+	uint32_t i;
 
 	if (point.x < 0. || point.x >= WIN_X || point.y < 0. || point.y >= WIN_Y)
 		return;
@@ -56,12 +80,13 @@ static void		fdf_put_line(t_fdf_t *fdf, t_vec3_t a, t_vec3_t b, int color)
 	d = (t_vec3_t) {d.x / max_d, d.y / max_d, d.z / max_d};
 	while (max_d >= 0)
 	{
-		if ((fdf->min || fdf->max) && fdf->max + fdf->min != 0)
-			color = hsl2rgb((a.z + fdf->min)
-				/ (fdf->max + fdf->min) * 360, .5, .5);
+		if (a.z == 0)
+			color = 0x505050;
 		else
-			color = hsl2rgb((a.z) * 360, .5, .5);
+			color = hsl2rgb(a.z, .5, .5);
 		color &= 0xFFFFFF;
+		if (fdf->projection >= 1)
+			color |= 0x7F000000;
         fdf_put_pixel(fdf, a, color);
 		a = (t_vec3_t){a.x + d.x, a.y + d.y, a.z + d.z};
 		max_d--;

@@ -6,7 +6,7 @@
 /*   By: mlacombe <mlacombe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/20 16:37:37 by mlacombe          #+#    #+#             */
-/*   Updated: 2019/12/15 20:10:26 by mlacombe         ###   ########.fr       */
+/*   Updated: 2020/02/18 17:48:36 by mlacombe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@ typedef struct	s_list
 
 typedef struct	s_point
 {
-	int			x;
-	int			y;
+	int32_t		x;
+	int32_t		y;
 }				t_point_t;
 
 

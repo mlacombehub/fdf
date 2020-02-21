@@ -6,7 +6,7 @@
 /*   By: mlacombe <mlacombe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/14 14:56:15 by mlacombe          #+#    #+#             */
-/*   Updated: 2020/02/17 17:09:24 by mlacombe         ###   ########.fr       */
+/*   Updated: 2020/02/21 18:24:17 by mlacombe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ t_vec3_t		fdf_scaling(t_vec2_t scale, t_vec3_t point)
 {
 	point.x *= scale.x;
 	point.y *= scale.x;
-	point.z *= scale.x * scale.y;
+	point.z *= scale.x;
 	return (point);
 }
 

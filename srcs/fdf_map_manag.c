@@ -6,7 +6,7 @@
 /*   By: mlacombe <mlacombe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 00:05:19 by mlacombe          #+#    #+#             */
-/*   Updated: 2020/02/13 17:50:22 by mlacombe         ###   ########.fr       */
+/*   Updated: 2020/02/18 17:35:14 by mlacombe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void 	fdf_countlines(t_fdf_t *fdf, char *str)
 
 void	fdf_countcolumns(t_fdf_t *fdf, char *str)
 {
-	int i;
+	uint32_t	i;
 
 	i = 0;
 	fdf->max_len = 0;

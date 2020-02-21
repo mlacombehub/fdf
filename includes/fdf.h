@@ -6,7 +6,7 @@
 /*   By: mlacombe <mlacombe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/25 15:16:58 by mlacombe          #+#    #+#             */
-/*   Updated: 2020/02/14 16:14:18 by mlacombe         ###   ########.fr       */
+/*   Updated: 2020/02/21 15:53:55 by mlacombe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 # include <math.h>
 # include <stdlib.h>
 # include <fcntl.h>
-# include <limits.h>
+// # include <limits.h>
 # include <stdio.h>
 
 /*
@@ -84,16 +84,17 @@ typedef struct	s_fdf
 	t_vec2_t	o_scale;
 	t_vec2_t	scale;
 	char		*progname;
-	int			*line_len;
-	int			*data_addr;
-	int			min;
-	int			max;
-	int			max_len;
-	int			nb_line;
-	int			bits_per_pixel;
-	int			line_size;
-	int			endian;
-	int			perspective;
+	int32_t		*line_len;
+	int32_t		*data_addr;
+	int32_t		min;
+	int32_t		max;
+	uint32_t	max_len;
+	int32_t		nb_line;
+	int32_t		bits_per_pixel;
+	int32_t		line_size;
+	int32_t		endian;
+	uint32_t	perspective;
+	uint32_t	projection;
 }				t_fdf_t;
 
 void			fdf_countlines(t_fdf_t *fdf, char *str);

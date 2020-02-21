@@ -6,7 +6,7 @@
 /*   By: mlacombe <mlacombe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 00:22:31 by mlacombe          #+#    #+#             */
-/*   Updated: 2020/02/18 17:03:00 by mlacombe         ###   ########.fr       */
+/*   Updated: 2020/02/21 18:25:12 by mlacombe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,18 +48,20 @@ static void	fdf_hooker_texas_ranger2(int key, t_fdf_t *fdf)
 	key == E ? fdf->rotation.z += M_PI / 36 : 42;
 	if (key == ENTER)
 	{
-		fdf->perspective = 0;
+		fdf->projection = 0;
 		fdf->offset = (t_vec3_t) {0};
 		fdf->scale = fdf->o_scale;
 		fdf->rotation = (t_vec3_t) {0};
 	}
 	if (key == I)
 	{
-		fdf->perspective = 0;
-		fdf->rotation = (t_vec3_t) {M_PI / 3, fdf->rotation.y, M_PI / 4};
+		fdf->projection = 0;
+		fdf->rotation = (t_vec3_t) {M_PI / 3, 0, M_PI / 4};
 	}
-	key == P ? fdf->perspective = 1 : 42;
-	key == O ? fdf->perspective = 0 : 42;
+	key == P ? fdf->perspective ^= 1 : 42;
+	key == J ? fdf->projection = 0 : 42;
+	key == K ? fdf->projection = 1 : 42;
+	key == L ? fdf->projection = 2 : 42;
 }
 
 static int	fdf_hooker_texas_ranger(int key, t_fdf_t *fdf)
@@ -69,14 +71,10 @@ static int	fdf_hooker_texas_ranger(int key, t_fdf_t *fdf)
 	key == RIGHT ? fdf->offset.x += fdf->o_scale.x : 42;
 	key == DOWN ? fdf->offset.y -= fdf->o_scale.x : 42;
 	key == UP ? fdf->offset.y += fdf->o_scale.x : 42;
-	if (key == PLUS)
-		fdf->scale = (t_vec2_t) {fdf->scale.x * 1.1, fdf->scale.y};
-	if (key == MINUS)
-		fdf->scale = (t_vec2_t) {fdf->scale.x / 1.1, fdf->scale.y};
-	if (key == X)
-		fdf->scale = (t_vec2_t) {fdf->scale.x, fdf->scale.y * 1.1};
-	if (key == Z)
-		fdf->scale = (t_vec2_t) {fdf->scale.x, fdf->scale.y / 1.1};
+	key == PLUS ? fdf->scale.x *= 1.1 : 42;
+	key == MINUS ? fdf->scale.x /= 1.1 : 42;
+	key == X ? fdf->scale.y *= 1.1 : 42;
+	key == Z ? fdf->scale.y /= 1.1 : 42;
 	fdf_hooker_texas_ranger2(key, fdf);
 	fdf_mlx_data_addressor(fdf);
 	return (0);
@@ -87,6 +85,7 @@ void		fdf_mlx_manag(t_fdf_t *fdf)
 	fdf->o_scale = (t_vec2_t) {fmin(WIN_X / (fdf->max_len + 1),
 		WIN_Y / (fdf->nb_line + 1)), 1};
 	fdf->scale = fdf->o_scale;
+	fdf->perspective = 0;
 	fdf->rotation = (t_vec3_t) {M_PI / -9, M_PI / -9, 0};
 	fdf_mlx_data_addressor(fdf);
 	mlx_hook(fdf->win, 2, 1, fdf_hooker_texas_ranger, fdf);
