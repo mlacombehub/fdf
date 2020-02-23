@@ -6,7 +6,7 @@
 /*   By: mlacombe <mlacombe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 00:22:31 by mlacombe          #+#    #+#             */
-/*   Updated: 2020/02/21 21:32:35 by mlacombe         ###   ########.fr       */
+/*   Updated: 2020/02/23 17:26:00 by mlacombe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ static void		fdf_put_line(t_fdf_t *fdf, t_vec3_t a, t_vec3_t b, int color)
 			color = 0x505050;
 		else
 			color = hsl2rgb(a.z, .5, .5);
-		color &= 0xFFFFFF;
+		fdf->projection >= 1 ? color &= 0xFFFFFF : 0;
 		if (fdf->projection >= 1)
 			color |= 0x7F000000;
         fdf_put_pixel(fdf, a, color);
