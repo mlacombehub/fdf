@@ -19,7 +19,6 @@
 # include <math.h>
 # include <stdlib.h>
 # include <fcntl.h>
-// # include <limits.h>
 # include <stdio.h>
 
 /*
@@ -70,14 +69,13 @@ typedef struct	s_matrix
 	double		c1;
 	double		c2;
 	double		c3;
-}				t_matrix_t;
+}				t_mtrx_t;
 
 typedef struct	s_fdf
 {
 	void		*mlx;
 	void		*win;
 	void		*img;
-	t_matrix_t	mtrx;
 	t_vec3_t	**points;
 	t_vec3_t	offset;
 	t_vec3_t	rotation;
@@ -106,7 +104,7 @@ void			fdf_mlx_manag(t_fdf_t *fdf);
 void			fdf_mlx_data_addressor(t_fdf_t *fdf);
 t_vec3_t       	fdf_translate(t_vec3_t offset, t_vec3_t point);
 t_vec3_t     	fdf_scaling(t_vec2_t scale, t_vec3_t ref);
-t_vec3_t     	fdf_rotation(t_vec3_t rotation, t_vec3_t ref, t_fdf_t *fdf);
+t_vec3_t     	fdf_rotation(t_vec3_t rotation, t_vec3_t ref);
 double			fdf_pcos(double number, int precision);
 double			fdf_psin(double number, int precision);
 

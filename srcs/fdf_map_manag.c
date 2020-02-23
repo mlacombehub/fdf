@@ -12,7 +12,7 @@
 
 #include "fdf.h"
 
-void 	fdf_countlines(t_fdf_t *fdf, char *str)
+void	fdf_countlines(t_fdf_t *fdf, char *str)
 {
 	fdf->nb_line = 0;
 	while (*str)
@@ -59,7 +59,7 @@ double	fdf_pcos(double number, int precision)
 
 double	fdf_psin(double number, int precision)
 {
-	number = sin(number) * ft_power(10, precision);;
-	number = round(number) / ft_power(10, precision);;
+	number = sin(number) * ft_power(10, precision);
+	number = round(number) / ft_power(10, precision);
 	return (number);
 }

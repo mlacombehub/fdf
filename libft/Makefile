@@ -6,7 +6,7 @@
 #    By: mlacombe <mlacombe@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/11/20 16:32:14 by mlacombe          #+#    #+#              #
-#    Updated: 2020/01/30 20:45:58 by mlacombe         ###   ########.fr        #
+#    Updated: 2020/02/23 20:38:04 by mlacombe         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -96,7 +96,6 @@ SRC =	ft_bzero.c\
 		ft_puterror.c\
 		ft_print_bytes.c\
 		ft_free_return.c\
-		ft_strlen_fast.c \
 		ft_atod.c
 
 SRC_DIR = srcs/

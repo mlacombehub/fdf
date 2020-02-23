@@ -12,14 +12,14 @@
 
 #include "fdf.h"
 
-static int 	close_screen(void *param)
+static int	close_screen(void *param)
 {
 	(void)param;
 	exit(1);
 	return (0);
 }
 
-void 		fdf_mlx_crea(t_fdf_t *fdf)
+void		fdf_mlx_crea(t_fdf_t *fdf)
 {
 	if (!(fdf->mlx = mlx_init()))
 		close_screen((void *)0);
@@ -66,7 +66,7 @@ static void	fdf_hooker_texas_ranger2(int key, t_fdf_t *fdf)
 
 static int	fdf_hooker_texas_ranger(int key, t_fdf_t *fdf)
 {
-	key == ESC ? close_screen((void *)0) : 42;
+	key == ESC ? close_screen(NULL) : 42;
 	key == LEFT ? fdf->offset.x -= fdf->o_scale.x : 42;
 	key == RIGHT ? fdf->offset.x += fdf->o_scale.x : 42;
 	key == DOWN ? fdf->offset.y -= fdf->o_scale.x : 42;
@@ -86,8 +86,10 @@ void		fdf_mlx_manag(t_fdf_t *fdf)
 		WIN_Y / (fdf->nb_line + 1)), 1};
 	fdf->scale = fdf->o_scale;
 	fdf->perspective = 0;
+	fdf->projection = 0;
 	fdf->rotation = (t_vec3_t) {M_PI / -9, M_PI / -9, 0};
 	fdf_mlx_data_addressor(fdf);
+	mlx_hook(fdf->win, 17, 1, close_screen, fdf);
 	mlx_hook(fdf->win, 2, 1, fdf_hooker_texas_ranger, fdf);
 	mlx_loop(fdf->mlx);
 }

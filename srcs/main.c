@@ -15,10 +15,10 @@
 static char	*fdf_reallocfile(int fd)
 {
 	long long	n;
-	char 		*buff;
-	char	 	*tmp;
-	char	 	*result;
-	int 		readres;
+	char		*buff;
+	char		*tmp;
+	char		*result;
+	int			readres;
 
 	if (!(buff = (char *)malloc(BUFF_FDF + 1)))
 		ft_free_return(buff);
@@ -36,10 +36,10 @@ static char	*fdf_reallocfile(int fd)
 	}
 	result[n] = 0;
 	free(buff);
-    return(result);
+	return (result);
 }
 
-static char *manage_file(int ac, char **av)
+static char	*manage_file(int ac, char **av)
 {
 	int		fd;
 	char	*result;
@@ -68,20 +68,17 @@ static char *manage_file(int ac, char **av)
 	return (result);
 }
 
-static void fdf_allocpoints(t_fdf_t *fdf, char *str)
+static void	fdf_allocpoints(t_fdf_t *fdf, char *str)
 {
 	t_point_t i;
 
 	i = (t_point_t) {-1, -1};
-	if (!(fdf->points = (t_vec3_t **)malloc(
-		sizeof(*fdf->points)* fdf->nb_line)))
-		return ((void)0);
 	while (++i.y < fdf->nb_line)
 	{
 		while (*str && *str == ' ')
 			str++;
 		if (!(fdf->points[i.y] = (t_vec3_t *)malloc(
-			sizeof(*fdf->points[i.y])* fdf->line_len[i.y])))
+			sizeof(*fdf->points[i.y]) * fdf->line_len[i.y])))
 			return ((void)0);
 		while (++i.x < fdf->line_len[i.y] && *str != '\n')
 		{
@@ -101,14 +98,17 @@ static void fdf_allocpoints(t_fdf_t *fdf, char *str)
 
 int			main(int ac, char **av)
 {
-	char *raw_str;
-	t_fdf_t fdf;
+	char	*raw_str;
+	t_fdf_t	fdf;
 
 	ft_bzero(&fdf, sizeof(t_fdf_t *));
 	fdf.progname = av[0];
 	raw_str = manage_file(ac, av);
 	fdf_countlines(&fdf, raw_str);
 	fdf_countcolumns(&fdf, raw_str);
+	if (!(fdf.points = (t_vec3_t **)malloc(
+		sizeof(*fdf.points) * fdf.nb_line)))
+		return (0);
 	fdf_allocpoints(&fdf, raw_str);
 	fdf_mlx_crea(&fdf);
 	fdf_mlx_manag(&fdf);
